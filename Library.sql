@@ -11,7 +11,7 @@ CREATE TABLE `catalog` (
 `ISBN` varchar(17) NOT NULL,
 `price` decimal(5,2) NOT NULL,
 `pub_date` date NOT NULL,
-`status` varchar(10) NOT NULL,
+`availability` varchar(10) NOT NULL,
 PRIMARY KEY (`book_id`),
 UNIQUE KEY `book_id_UNIQUE` (`book_id`)
 
@@ -24,7 +24,7 @@ CREATE TABLE `library_user` (
 `address` varchar(45) NOT NULL,
 `postcode` varchar(45) NOT NULL,
 `email` varchar(17) NOT NULL,
-`dob` decimal(5,2) NOT NULL,
+`dob` date NOT NULL,
 `date_joined` date NOT NULL,
 PRIMARY KEY (`user_id`),
 UNIQUE KEY `user_id_UNIQUE` (`user_id`)
@@ -51,15 +51,43 @@ CREATE TABLE `transactions` (
 `due_date` date NOT NULL,
 `date_returned` date,
 `book_condition` varchar(17),
-`dob` decimal(5,2) NOT NULL,
-`date_joined` date NOT NULL,
 PRIMARY KEY (`transaction_id`),
 UNIQUE KEY `transaction_id_UNIQUE` (`transaction_id`)
 
 
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
+INSERT into catalog (title, author_id, genre, publisher, ISBN, price, pub_date, availability)
+values ('Extremely Loud and Incredibly Close', 1, 'drama', 'Mariner Books', '978-0547735023', 5.00, "2005-01-01", "Borrowed"),
+('Fantastic Mr Fox', 2, 'adventure', 'Puffin', '978-0141346441', 3.20, "2013-02-13", "Available");
+
+INSERT into library_user (firstname, lastname, address, postcode, email, dob, date_joined)
+values ('Katie', 'Costa Welch', '64 Zoo Lane', 'ZL3 6BU', 'katie@zoolane.com', '2000-06-24', '2023-10-19'),
+ ('Chloe', 'Vu', '10 Downing Street', 'DW17 5PA', 'chloe@mp.com', '2016-10-01', '2023-10-19');
+ 
+ INSERT into authors (firstname, lastname)
+ values ('Jonathan', 'Foer'), ('Roald', 'Dahl');
+ 
+ INSERT into transactions (book_id, user_id, date_borrowed, due_date)
+ values (1, 1, '2023-10-10', '2023-10-24');
+ 
+ INSERT into transactions (book_id, user_id, date_borrowed, due_date, date_returned, book_condition)
+ values (2, 2, '2023-10-06', '2023-10-20', '2023-10-15', 'Damaged');
+
 ALTER TABLE catalog
 ADD CONSTRAINT authorid
 FOREIGN KEY (author_id) REFERENCES authors(author_id);
 
+ALTER TABLE transactions
+ADD CONSTRAINT bookid
+FOREIGN KEY (book_id) REFERENCES catalog(book_id);
+
+ALTER TABLE transactions
+ADD CONSTRAINT userid
+FOREIGN KEY (user_id) REFERENCES library_user(user_id);
+
+
+SELECT * 
+FROM catalog
+JOIN authors ON catalog.author_id = authors.author_id;
