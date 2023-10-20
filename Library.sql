@@ -85,6 +85,15 @@ ALTER TABLE transactions
 ADD CONSTRAINT userid
 FOREIGN KEY (user_id) REFERENCES library_user(user_id);
 
-SELECT * 
+-- Query books with author details
+SELECT catalog.book_id, catalog.title, catalog.author_id, authors.firstname, authors.lastname, catalog.genre, catalog.publisher, catalog.ISBN, catalog.price, catalog.pub_date, catalog.availability
 FROM catalog
-JOIN authors ON catalog.author_id = authors.author_id;
+INNER JOIN authors ON catalog.author_id=authors.author_id;
+
+-- Query book transactions with additional details
+SELECT transactions.transaction_id, transactions.book_id, catalog.title, catalog.author_id, authors.firstname, authors.lastname, transactions.user_id, library_user.firstname, library_user.lastname, 
+transactions.date_borrowed, transactions.due_date, transactions.date_returned, transactions.book_condition
+FROM transactions
+INNER JOIN catalog ON transactions.book_id=catalog.author_id
+INNER JOIN authors ON catalog.author_id=authors.author_id
+INNER JOIN library_user ON transactions.user_id=library_user.user_id;
