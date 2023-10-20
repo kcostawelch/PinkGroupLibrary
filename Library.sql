@@ -28,19 +28,14 @@ CREATE TABLE `library_user` (
 `date_joined` date NOT NULL,
 PRIMARY KEY (`user_id`),
 UNIQUE KEY `user_id_UNIQUE` (`user_id`)
-
-
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `authors` (
 `author_id` int NOT NULL AUTO_INCREMENT,
 `firstname` varchar(45) NOT NULL,
 `lastname` varchar(45) NOT NULL,
-
 PRIMARY KEY (`author_id`),
 UNIQUE KEY `author_id_UNIQUE` (`author_id`)
-
-
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `transactions` (
@@ -53,10 +48,13 @@ CREATE TABLE `transactions` (
 `book_condition` varchar(17),
 PRIMARY KEY (`transaction_id`),
 UNIQUE KEY `transaction_id_UNIQUE` (`transaction_id`)
-
-
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- Ensure that auto-incrementing starts from 1;
+ALTER TABLE catalog AUTO_INCREMENT=1;
+ALTER TABLE authors AUTO_INCREMENT=1;
+ALTER TABLE library_user AUTO_INCREMENT=1;
+ALTER TABLE transactions AUTO_INCREMENT=1;
 
 INSERT into catalog (title, author_id, genre, publisher, ISBN, price, pub_date, availability)
 values ('Extremely Loud and Incredibly Close', 1, 'drama', 'Mariner Books', '978-0547735023', 5.00, "2005-01-01", "Borrowed"),
@@ -86,7 +84,6 @@ FOREIGN KEY (book_id) REFERENCES catalog(book_id);
 ALTER TABLE transactions
 ADD CONSTRAINT userid
 FOREIGN KEY (user_id) REFERENCES library_user(user_id);
-
 
 SELECT * 
 FROM catalog
